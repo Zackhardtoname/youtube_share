@@ -1,0 +1,170 @@
+STATISTICAL COMPARISON OF TOPIC DISTRIBUTIONS
+================================================================================
+Analysis Date: 2025-09-11 16:50:27
+
+SUMMARY:
+This analysis compares the topic distributions between different problem sets using:
+1. Chi-square test of independence - tests if distributions are significantly different
+2. G-test (log-likelihood ratio) - alternative test for categorical data independence
+3. Cramer's V - measures effect size for chi-square test (0 = no association, 1 = perfect association)
+4. Top topic differences - shows which topics differ most between distributions
+
+COMPARISON 1: Local_Problems vs All_Companies_Combined
+--------------------------------------------------
+Total problems compared:
+  - Local_Problems: 2,248
+  - All_Companies_Combined: 5,437
+  - Topics analyzed: 68
+
+CHI-SQUARE TEST RESULTS:
+  Chi-square statistic: 388.9827
+  P-value: 6.67e-47
+  Degrees of freedom: 67
+  Significant difference: YES (alpha = 0.05)
+  Cramer's V (effect size): 0.2250
+  Interpretation: The distributions are significantly different
+
+G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
+  G statistic: 388.3629
+  P-value: 0.00e+00
+  Degrees of freedom: 67
+  Significant difference: YES (alpha = 0.05)
+  Interpretation: The distributions are significantly different
+
+TOP 10 TOPIC DIFFERENCES (by proportion):
+Rank Topic                Local_Problems  All_Companies_Combined Difference  
+--------------------------------------------------------------------------------
+1    Hash Table           0.085           0.112           -0.027
+2    Two Pointers         0.030           0.058           -0.027
+3    Math                 0.065           0.046           +0.019
+4    Design               0.019           0.038           -0.019
+5    Bit Manipulation     0.028           0.010           +0.018
+6    Greedy               0.048           0.030           +0.018
+7    Linked List          0.015           0.031           -0.016
+8    Prefix Sum           0.028           0.015           +0.013
+9    Recursion            0.007           0.020           -0.013
+10   Graph                0.028           0.017           +0.010
+
+================================================================================
+
+COMPARISON 2: Local_Problems vs FAANG_Combined
+--------------------------------------------------
+Total problems compared:
+  - Local_Problems: 2,248
+  - FAANG_Combined: 879
+  - Topics analyzed: 64
+
+CHI-SQUARE TEST RESULTS:
+  Chi-square statistic: 236.9038
+  P-value: 5.76e-22
+  Degrees of freedom: 63
+  Significant difference: YES (alpha = 0.05)
+  Cramer's V (effect size): 0.2752
+  Interpretation: The distributions are significantly different
+
+G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
+  G statistic: 258.8874
+  P-value: 0.00e+00
+  Degrees of freedom: 63
+  Significant difference: YES (alpha = 0.05)
+  Interpretation: The distributions are significantly different
+
+TOP 10 TOPIC DIFFERENCES (by proportion):
+Rank Topic                Local_Problems  FAANG_Combined  Difference  
+--------------------------------------------------------------------------------
+1    Two Pointers         0.030           0.083           -0.053
+2    Linked List          0.015           0.046           -0.031
+3    Recursion            0.007           0.034           -0.027
+4    Backtracking         0.016           0.042           -0.026
+5    Greedy               0.048           0.024           +0.024
+6    Prefix Sum           0.028           0.009           +0.019
+7    Hash Table           0.085           0.101           -0.016
+8    Graph                0.028           0.015           +0.013
+9    Bit Manipulation     0.028           0.016           +0.012
+10   Counting             0.018           0.007           +0.011
+
+================================================================================
+
+COMPARISON 3: NeetCode_150 vs All_Companies_Combined
+--------------------------------------------------
+Total problems compared:
+  - NeetCode_150: 376
+  - All_Companies_Combined: 5,437
+  - Topics analyzed: 64
+
+CHI-SQUARE TEST RESULTS:
+  Chi-square statistic: 85.1475
+  P-value: 3.30e-02
+  Degrees of freedom: 63
+  Significant difference: YES (alpha = 0.05)
+  Cramer's V (effect size): 0.1210
+  Interpretation: The distributions are significantly different
+
+G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
+  G statistic: 89.8326
+  P-value: 1.49e-02
+  Degrees of freedom: 63
+  Significant difference: YES (alpha = 0.05)
+  Interpretation: The distributions are significantly different
+
+TOP 10 TOPIC DIFFERENCES (by proportion):
+Rank Topic                NeetCode_150    All_Companies_Combined Difference  
+--------------------------------------------------------------------------------
+1    Hash Table           0.077           0.112           -0.035
+2    Depth-First Search   0.082           0.050           +0.033
+3    Dynamic Programming  0.093           0.069           +0.024
+4    Breadth-First Search 0.069           0.046           +0.023
+5    Binary Tree          0.043           0.022           +0.021
+6    Two Pointers         0.043           0.058           -0.015
+7    Graph                0.032           0.017           +0.014
+8    Bit Manipulation     0.024           0.010           +0.014
+9    Sorting              0.045           0.059           -0.013
+10   Simulation           0.005           0.018           -0.013
+
+================================================================================
+
+COMPARISON 4: NeetCode_150 vs FAANG_Combined
+--------------------------------------------------
+Total problems compared:
+  - NeetCode_150: 376
+  - FAANG_Combined: 879
+  - Topics analyzed: 50
+
+CHI-SQUARE TEST RESULTS:
+  Chi-square statistic: 63.2653
+  P-value: 8.27e-02
+  Degrees of freedom: 49
+  Significant difference: NO (alpha = 0.05)
+  Cramer's V (effect size): 0.2245
+  Interpretation: No significant difference found
+
+G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
+  G statistic: 67.3099
+  P-value: 4.23e-02
+  Degrees of freedom: 49
+  Significant difference: YES (alpha = 0.05)
+  Interpretation: The distributions are significantly different
+
+TOP 10 TOPIC DIFFERENCES (by proportion):
+Rank Topic                NeetCode_150    FAANG_Combined  Difference  
+--------------------------------------------------------------------------------
+1    Two Pointers         0.043           0.083           -0.040
+2    Depth-First Search   0.082           0.048           +0.035
+3    Breadth-First Search 0.069           0.040           +0.029
+4    Math                 0.035           0.059           -0.025
+5    Hash Table           0.077           0.101           -0.024
+6    Graph                0.032           0.015           +0.017
+7    Linked List          0.029           0.046           -0.016
+8    Heap (Priority Queue) 0.040           0.024           +0.016
+9    Recursion            0.019           0.034           -0.016
+10   Dynamic Programming  0.093           0.078           +0.015
+
+================================================================================
+
+NOTES:
+- A significant chi-square test (p < 0.05) indicates the topic distributions are different
+- A significant G-test (p < 0.05) confirms the distributions are different (alternative to chi-square)
+- G-test is generally more powerful than chi-square for detecting differences in categorical data
+- Positive differences mean the first dataset has higher proportion of that topic
+- Negative differences mean the second dataset has higher proportion of that topic
+- Cramer's V interpretation: 0.1=small, 0.3=medium, 0.5=large effect size

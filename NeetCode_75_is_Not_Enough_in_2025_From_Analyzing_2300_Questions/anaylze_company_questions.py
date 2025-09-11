@@ -15,7 +15,7 @@ from datetime import datetime
 # Constants
 EXCLUDED_TOPICS = {"Array", "String", "Tree"}
 FAANG_COMPANIES = ["Meta", "Apple", "Amazon", "Netflix", "Google"]
-AUTO_OPEN_HTML = True  # Set to True to automatically open HTML files in browser
+AUTO_OPEN_HTML = False  # Set to True to automatically open HTML files in browser
 VIZ_CONFIG = {
     'height': 1200,
     'font_size': 14,
@@ -391,7 +391,8 @@ def analyze_companies_unified(company_filter_list, analysis_name, time_period="3
     
     topic_counts = pd.Series(all_topics).value_counts()
     total_questions = len(filtered_df)
-    topic_percentages = (topic_counts / total_questions * 100).round(1)
+    total_topics = len(all_topics)
+    topic_percentages = (topic_counts / total_topics * 100).round(1)
     
     print(f"\nMost popular Topics for {analysis_name} ({display_period}):")
     print(f"Total questions analyzed: {total_questions}")
@@ -473,7 +474,8 @@ def analyze_neetcode_150():
     # Calculate statistics
     topic_counts = pd.Series(all_topics).value_counts()
     total_questions = problems_with_topics
-    topic_percentages = (topic_counts / total_questions * 100).round(1)
+    total_topics = len(all_topics)
+    topic_percentages = (topic_counts / total_topics * 100).round(1)
     
     print(f"\nNeetCode 150 Topic Analysis:")
     print(f"Total problems analyzed: {total_questions}")
@@ -532,7 +534,8 @@ def analyze_local_problems():
     # Calculate statistics
     topic_counts = pd.Series(all_topics).value_counts()
     total_questions = problems_with_topics
-    topic_percentages = (topic_counts / total_questions * 100).round(1)
+    total_topics = len(all_topics)
+    topic_percentages = (topic_counts / total_topics * 100).round(1)
     
     print(f"\nLocal Problems Topic Analysis:")
     print(f"Total problems analyzed: {total_questions}")

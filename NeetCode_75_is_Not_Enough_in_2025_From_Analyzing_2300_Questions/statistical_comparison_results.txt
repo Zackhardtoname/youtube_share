@@ -1,6 +1,6 @@
 STATISTICAL COMPARISON OF TOPIC DISTRIBUTIONS
 ================================================================================
-Analysis Date: 2025-09-11 17:31:37
+Analysis Date: 2025-09-11 19:17:59
 
 SUMMARY:
 This analysis compares the topic distributions between different problem sets using:
@@ -13,19 +13,19 @@ COMPARISON 1: Local_Problems vs All_Companies_Combined
 --------------------------------------------------
 Total problems compared:
   - Local_Problems: 2,248
-  - All_Companies_Combined: 5,437
+  - All_Companies_Combined: 363,129.00000000006
   - Topics analyzed: 68
 
 CHI-SQUARE TEST RESULTS:
-  Chi-square statistic: 388.9827
-  P-value: 6.67e-47
+  Chi-square statistic: 2007.6283
+  P-value: 0.00e+00
   Degrees of freedom: 67
   Significant difference: YES (alpha = 0.05)
-  Cramer's V (effect size): 0.2250
+  Cramer's V (effect size): 0.0741
   Interpretation: The distributions are significantly different
 
 G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
-  G statistic: 388.3629
+  G statistic: 649.5932
   P-value: 0.00e+00
   Degrees of freedom: 67
   Significant difference: YES (alpha = 0.05)
@@ -34,16 +34,16 @@ G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
 TOP 10 TOPIC DIFFERENCES (by proportion):
 Rank Topic                Local_Problems  All_Companies_Combined Difference  
 --------------------------------------------------------------------------------
-1    Hash Table           0.085           0.112           -0.027
-2    Two Pointers         0.030           0.058           -0.027
-3    Math                 0.065           0.046           +0.019
-4    Design               0.019           0.038           -0.019
-5    Bit Manipulation     0.028           0.010           +0.018
-6    Greedy               0.048           0.030           +0.018
-7    Linked List          0.015           0.031           -0.016
-8    Prefix Sum           0.028           0.015           +0.013
-9    Recursion            0.007           0.020           -0.013
-10   Graph                0.028           0.017           +0.010
+1    Hash Table           0.085           0.116           -0.031
+2    Two Pointers         0.030           0.057           -0.026
+3    Design               0.019           0.040           -0.021
+4    Math                 0.065           0.044           +0.020
+5    Bit Manipulation     0.028           0.009           +0.019
+6    Greedy               0.048           0.031           +0.017
+7    Linked List          0.015           0.030           -0.015
+8    Binary Tree          0.031           0.018           +0.013
+9    Prefix Sum           0.028           0.015           +0.013
+10   Recursion            0.007           0.018           -0.011
 
 ================================================================================
 
@@ -51,19 +51,19 @@ COMPARISON 2: Local_Problems vs FAANG_Combined
 --------------------------------------------------
 Total problems compared:
   - Local_Problems: 2,248
-  - FAANG_Combined: 879
+  - FAANG_Combined: 43,096.1
   - Topics analyzed: 64
 
 CHI-SQUARE TEST RESULTS:
-  Chi-square statistic: 236.9038
-  P-value: 5.76e-22
+  Chi-square statistic: 2836.8163
+  P-value: 0.00e+00
   Degrees of freedom: 63
   Significant difference: YES (alpha = 0.05)
-  Cramer's V (effect size): 0.2752
+  Cramer's V (effect size): 0.2501
   Interpretation: The distributions are significantly different
 
 G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
-  G statistic: 258.8874
+  G statistic: 1323.1014
   P-value: 0.00e+00
   Degrees of freedom: 63
   Significant difference: YES (alpha = 0.05)
@@ -72,16 +72,16 @@ G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
 TOP 10 TOPIC DIFFERENCES (by proportion):
 Rank Topic                Local_Problems  FAANG_Combined  Difference  
 --------------------------------------------------------------------------------
-1    Two Pointers         0.030           0.083           -0.053
-2    Linked List          0.015           0.046           -0.031
-3    Recursion            0.007           0.034           -0.027
-4    Backtracking         0.016           0.042           -0.026
+1    Two Pointers         0.030           0.085           -0.055
+2    Linked List          0.015           0.046           -0.032
+3    Recursion            0.007           0.033           -0.026
+4    Hash Table           0.085           0.111           -0.026
 5    Greedy               0.048           0.024           +0.024
 6    Prefix Sum           0.028           0.009           +0.019
-7    Hash Table           0.085           0.101           -0.016
-8    Graph                0.028           0.015           +0.013
-9    Bit Manipulation     0.028           0.016           +0.012
-10   Counting             0.018           0.007           +0.011
+7    Backtracking         0.016           0.034           -0.018
+8    Bit Manipulation     0.028           0.012           +0.016
+9    Graph                0.028           0.014           +0.013
+10   Divide and Conquer   0.009           0.022           -0.012
 
 ================================================================================
 
@@ -89,20 +89,20 @@ COMPARISON 3: NeetCode_150 vs All_Companies_Combined
 --------------------------------------------------
 Total problems compared:
   - NeetCode_150: 376
-  - All_Companies_Combined: 5,437
+  - All_Companies_Combined: 363,128.99999999994
   - Topics analyzed: 64
 
 CHI-SQUARE TEST RESULTS:
-  Chi-square statistic: 85.1475
-  P-value: 3.30e-02
+  Chi-square statistic: 112.3981
+  P-value: 1.30e-04
   Degrees of freedom: 63
   Significant difference: YES (alpha = 0.05)
-  Cramer's V (effect size): 0.1210
+  Cramer's V (effect size): 0.0176
   Interpretation: The distributions are significantly different
 
 G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
-  G statistic: 89.8326
-  P-value: 1.49e-02
+  G statistic: 108.3315
+  P-value: 3.36e-04
   Degrees of freedom: 63
   Significant difference: YES (alpha = 0.05)
   Interpretation: The distributions are significantly different
@@ -110,15 +110,15 @@ G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
 TOP 10 TOPIC DIFFERENCES (by proportion):
 Rank Topic                NeetCode_150    All_Companies_Combined Difference  
 --------------------------------------------------------------------------------
-1    Hash Table           0.077           0.112           -0.035
-2    Depth-First Search   0.082           0.050           +0.033
-3    Dynamic Programming  0.093           0.069           +0.024
-4    Breadth-First Search 0.069           0.046           +0.023
-5    Binary Tree          0.043           0.022           +0.021
-6    Two Pointers         0.043           0.058           -0.015
-7    Graph                0.032           0.017           +0.014
-8    Bit Manipulation     0.024           0.010           +0.014
-9    Sorting              0.045           0.059           -0.013
+1    Hash Table           0.077           0.116           -0.039
+2    Depth-First Search   0.082           0.048           +0.035
+3    Dynamic Programming  0.093           0.068           +0.025
+4    Binary Tree          0.043           0.018           +0.025
+5    Breadth-First Search 0.069           0.045           +0.024
+6    Sorting              0.045           0.061           -0.016
+7    Bit Manipulation     0.024           0.009           +0.015
+8    Graph                0.032           0.017           +0.014
+9    Two Pointers         0.043           0.057           -0.014
 10   Simulation           0.005           0.018           -0.013
 
 ================================================================================
@@ -127,20 +127,20 @@ COMPARISON 4: NeetCode_150 vs FAANG_Combined
 --------------------------------------------------
 Total problems compared:
   - NeetCode_150: 376
-  - FAANG_Combined: 879
+  - FAANG_Combined: 43,096.1
   - Topics analyzed: 50
 
 CHI-SQUARE TEST RESULTS:
-  Chi-square statistic: 63.2653
-  P-value: 8.27e-02
+  Chi-square statistic: 442.4303
+  P-value: 9.52e-65
   Degrees of freedom: 49
-  Significant difference: NO (alpha = 0.05)
-  Cramer's V (effect size): 0.2245
-  Interpretation: No significant difference found
+  Significant difference: YES (alpha = 0.05)
+  Cramer's V (effect size): 0.1009
+  Interpretation: The distributions are significantly different
 
 G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
-  G statistic: 67.3099
-  P-value: 4.23e-02
+  G statistic: 122.7562
+  P-value: 2.92e-08
   Degrees of freedom: 49
   Significant difference: YES (alpha = 0.05)
   Interpretation: The distributions are significantly different
@@ -148,16 +148,16 @@ G-TEST (LOG-LIKELIHOOD RATIO) RESULTS:
 TOP 10 TOPIC DIFFERENCES (by proportion):
 Rank Topic                NeetCode_150    FAANG_Combined  Difference  
 --------------------------------------------------------------------------------
-1    Two Pointers         0.043           0.083           -0.040
-2    Depth-First Search   0.082           0.048           +0.035
-3    Breadth-First Search 0.069           0.040           +0.029
-4    Math                 0.035           0.059           -0.025
-5    Hash Table           0.077           0.101           -0.024
-6    Graph                0.032           0.015           +0.017
-7    Linked List          0.029           0.046           -0.016
-8    Heap (Priority Queue) 0.040           0.024           +0.016
-9    Recursion            0.019           0.034           -0.016
-10   Dynamic Programming  0.093           0.078           +0.015
+1    Two Pointers         0.043           0.085           -0.043
+2    Depth-First Search   0.082           0.043           +0.039
+3    Breadth-First Search 0.069           0.035           +0.034
+4    Hash Table           0.077           0.111           -0.034
+5    Math                 0.035           0.057           -0.022
+6    Graph                0.032           0.014           +0.018
+7    Binary Tree          0.043           0.025           +0.017
+8    Linked List          0.029           0.046           -0.017
+9    Dynamic Programming  0.093           0.078           +0.015
+10   Recursion            0.019           0.033           -0.014
 
 ================================================================================
 

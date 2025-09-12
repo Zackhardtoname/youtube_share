@@ -15,7 +15,7 @@ from datetime import datetime
 # Constants
 EXCLUDED_TOPICS = {"Array", "String", "Tree"}
 FAANG_COMPANIES = ["Meta", "Apple", "Amazon", "Netflix", "Google"]
-AUTO_OPEN_HTML = False  # Set to True to automatically open HTML files in browser
+AUTO_OPEN_HTML = True  # Set to True to automatically open HTML files in browser
 VIZ_CONFIG = {
     'height': 1200,
     'font_size': 14,
@@ -76,8 +76,8 @@ def compare_distributions(dist1, dist2, name1, name2):
     aligned_dist1 = np.array(aligned_dist1)
     aligned_dist2 = np.array(aligned_dist2)
     
-    # Create contingency table for chi-square test
-    contingency_table = np.array([aligned_dist1, aligned_dist2])
+    # Create contingency table for chi-square test (round to integers for chi-square test)
+    contingency_table = np.array([np.round(aligned_dist1).astype(int), np.round(aligned_dist2).astype(int)])
     
     results = {
         'comparison': f"{name1} vs {name2}",
@@ -243,48 +243,191 @@ def save_statistical_results(results_list, filename="../stats/statistical_compar
     print(f"Statistical results saved to: {filename}")
 
 
-def create_interactive_visualizations(topic_counts, topic_percentages, company, display_period):
+def create_interactive_visualizations(topic_counts, topic_percentages, company, display_period, topic_questions=None):
     """Create interactive visualizations using Plotly"""
     
-    # Create subplots with vertical layout (2 rows, 1 column)
+    # Create subplots with vertical layout (3 rows, 1 column)
     fig = make_subplots(
-        rows=2, cols=1,
-        subplot_titles=('Topic Distribution (Pie)', 'Top Topics (Bar)'),
+        rows=3, cols=1,
+        subplot_titles=('', 'Top 15 Topics (Bar - Hover for Questions)', 'All Topics Frequency (Table with Question Samples)'),
         specs=[
             [{"type": "pie"}],
-            [{"type": "bar"}]
+            [{"type": "bar"}],
+            [{"type": "table"}]
         ],
         vertical_spacing=0.15
     )
     
     # 1. Pie chart for top 10 topics
     top_10_counts = topic_counts.head(10)
-    fig.add_trace(
-        go.Pie(
-            labels=top_10_counts.index,
-            values=top_10_counts.values,
-            name="Topic Distribution",
-            hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>',
-            textinfo='label+percent'
-        ),
-        row=1, col=1
-    )
-    
-    # 2. Vertical bar chart for top 10 topics
     top_10_percentages = topic_percentages.head(10)
-    fig.add_trace(
-        go.Bar(
-            x=top_10_counts.index,
-            y=top_10_counts.values,
-            name='Top Topics',
-            marker_color='steelblue',
-            text=[f'{count}<br>({perc}%)' for count, perc in zip(top_10_counts.values, top_10_percentages.values)],
-            textposition='outside',
-            hovertemplate='<b>%{x}</b><br>Count: %{y}<br>Percentage: %{customdata}<extra></extra>',
-            customdata=[f'{p}%' for p in top_10_percentages.values]
-        ),
-        row=2, col=1
-    )
+    
+    # Prepare hover text with questions if available
+    hover_template = '<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}'
+    if topic_questions:
+        customdata = []
+        for topic in top_10_counts.index:
+            questions = topic_questions.get(topic, [])
+            if questions:
+                # Limit to first 10 questions to avoid overly long tooltips
+                question_list = questions[:10]
+                questions_text = '<br>'.join([f"• {q}" for q in question_list])
+                if len(questions) > 10:
+                    questions_text += f"<br>... and {len(questions) - 10} more"
+                customdata.append(questions_text)
+            else:
+                customdata.append("No questions found")
+        hover_template += '<br><br>Questions:<br>%{customdata}<extra></extra>'
+        
+        fig.add_trace(
+            go.Pie(
+                labels=top_10_counts.index,
+                values=top_10_counts.values,
+                name="Topic Distribution",
+                hovertemplate=hover_template,
+                textinfo='label+percent',
+                customdata=customdata
+            ),
+            row=1, col=1
+        )
+    else:
+        hover_template += '<extra></extra>'
+        fig.add_trace(
+            go.Pie(
+                labels=top_10_counts.index,
+                values=top_10_counts.values,
+                name="Topic Distribution",
+                hovertemplate=hover_template,
+                textinfo='label+percent'
+            ),
+            row=1, col=1
+        )
+    
+    # 2. Vertical bar chart for top 15 topics
+    top_15_counts = topic_counts.head(15)
+    top_15_percentages = topic_percentages.head(15)
+    
+    # Prepare hover text with questions if available
+    hover_template = '<b>%{x}</b><br>Count: %{y}<br>Percentage: %{customdata}'
+    if topic_questions:
+        bar_customdata = []
+        for topic in top_15_counts.index:
+            questions = topic_questions.get(topic, [])
+            percentage = f'{topic_percentages[topic]}%'
+            if questions:
+                # Limit to first 8 questions for bar chart tooltips
+                question_list = questions[:8]
+                questions_text = '<br>'.join([f"• {q}" for q in question_list])
+                if len(questions) > 8:
+                    questions_text += f"<br>... and {len(questions) - 8} more"
+                combined_data = f"{percentage}<br><br>Questions:<br>{questions_text}"
+            else:
+                combined_data = f"{percentage}<br><br>No questions found"
+            bar_customdata.append(combined_data)
+        hover_template += '<extra></extra>'
+        
+        fig.add_trace(
+            go.Bar(
+                x=top_15_counts.index,
+                y=top_15_counts.values,
+                name='Top 15 Topics',
+                marker_color='steelblue',
+                text=[f'{count:.1f}<br>({perc}%)' for count, perc in zip(top_15_counts.values, top_15_percentages.values)],
+                textposition='outside',
+                hovertemplate=hover_template,
+                customdata=bar_customdata,
+                showlegend=False
+            ),
+            row=2, col=1
+        )
+    else:
+        hover_template += '<extra></extra>'
+        fig.add_trace(
+            go.Bar(
+                x=top_15_counts.index,
+                y=top_15_counts.values,
+                name='Top 15 Topics',
+                marker_color='steelblue',
+                text=[f'{count:.1f}<br>({perc}%)' for count, perc in zip(top_15_counts.values, top_15_percentages.values)],
+                textposition='outside',
+                hovertemplate=hover_template,
+                customdata=[f'{p}%' for p in top_15_percentages.values],
+                showlegend=False
+            ),
+            row=2, col=1
+        )
+    
+    # 3. Complete frequency breakdown - all topics in ascending order (table)
+    # Sort topics by count in ascending order (least frequent first)
+    ascending_counts = topic_counts.sort_values(ascending=True)
+    ascending_percentages = topic_percentages[ascending_counts.index]
+    
+    # Create rank column (1 = least frequent, highest number = most frequent)
+    ranks = list(range(1, len(ascending_counts) + 1))
+    
+    # Prepare question samples for table
+    if topic_questions:
+        question_samples = []
+        for topic in ascending_counts.index:
+            questions = topic_questions.get(topic, [])
+            if questions:
+                # Show first 3 questions as sample
+                sample = questions[:3]
+                sample_text = '; '.join(sample)
+                if len(questions) > 3:
+                    sample_text += f' (+{len(questions) - 3} more)'
+                question_samples.append(sample_text)
+            else:
+                question_samples.append('No questions found')
+        
+        fig.add_trace(
+            go.Table(
+                header=dict(
+                    values=['Rank', 'Topic', 'Count', 'Percentage', 'Sample Questions'],
+                    fill_color='lightblue',
+                    align='left',
+                    font=dict(size=12, color='black')
+                ),
+                cells=dict(
+                    values=[
+                        ranks,
+                        ascending_counts.index.tolist(),
+                        [f'{val:.1f}' for val in ascending_counts.values.tolist()],
+                        [f'{p}%' for p in ascending_percentages.values],
+                        question_samples
+                    ],
+                    fill_color='white',
+                    align='left',
+                    font=dict(size=11, color='black'),
+                    height=25
+                )
+            ),
+            row=3, col=1
+        )
+    else:
+        fig.add_trace(
+            go.Table(
+                header=dict(
+                    values=['Rank', 'Topic', 'Count', 'Percentage'],
+                    fill_color='lightblue',
+                    align='left',
+                    font=dict(size=12, color='black')
+                ),
+                cells=dict(
+                    values=[
+                        ranks,
+                        ascending_counts.index.tolist(),
+                        [f'{val:.1f}' for val in ascending_counts.values.tolist()],
+                        [f'{p}%' for p in ascending_percentages.values]
+                    ],
+                    fill_color='white',
+                    align='left',
+                    font=dict(size=11, color='black'),
+                    height=25
+                )
+            ),
+            row=3, col=1
+        )
     
     # Update layout
     title = f'{company} - {display_period} - Interactive Topic Analysis'
@@ -296,16 +439,16 @@ def create_interactive_visualizations(topic_counts, topic_percentages, company, 
     fig.update_layout(
         title=title,
         title_x=0.5,
-        height=VIZ_CONFIG['height'],
+        height=2000,  # Increased height for better spacing
         showlegend=False,
         font=dict(size=VIZ_CONFIG['font_size']),
-        margin=VIZ_CONFIG['margin']
+        margin=dict(l=150, r=100, t=200, b=250)  # Increased margins for better spacing
     )
     
-    # Update x-axis for bar chart
+    # Update x-axis for top 15 bar chart
     fig.update_xaxes(title_text="Topics", row=2, col=1, tickangle=45)
     
-    # Update y-axis for bar chart
+    # Update y-axis for top 15 bar chart
     fig.update_yaxes(title_text="Count", row=2, col=1)
     
     # Save and open HTML
@@ -379,27 +522,47 @@ def analyze_companies_unified(company_filter_list, analysis_name, time_period="3
     
     print(f"Dataset shape for {analysis_name} ({display_period}): {filtered_df.shape}")
     
-    # Extract and filter topics
-    all_topics = []
-    for topics_str in filtered_df['Topics'].dropna():
-        filtered_topics = filter_topics(topics_str)
-        all_topics.extend(filtered_topics)
+    # Extract and filter topics with frequency weighting
+    topic_weights = {}
+    total_weighted_topics = 0
     
-    if not all_topics:
+    for _, row in filtered_df.iterrows():
+        topics_str = row.get('Topics')
+        frequency = row.get('Frequency', 1.0)  # Default to 1.0 if no frequency column
+        
+        if pd.isna(topics_str):
+            continue
+            
+        # Ensure frequency is numeric and handle potential string values
+        try:
+            frequency = float(frequency) if pd.notna(frequency) else 1.0
+        except (ValueError, TypeError):
+            frequency = 1.0
+        
+        filtered_topics = filter_topics(topics_str)
+        for topic in filtered_topics:
+            if topic not in topic_weights:
+                topic_weights[topic] = 0
+            topic_weights[topic] += frequency
+            total_weighted_topics += frequency
+    
+    if not topic_weights:
         print("No topics found after filtering")
         return
     
-    topic_counts = pd.Series(all_topics).value_counts()
+    # Convert to pandas Series and sort by weighted frequency
+    topic_counts = pd.Series(topic_weights).sort_values(ascending=False)
     total_questions = len(filtered_df)
-    total_topics = len(all_topics)
+    total_topics = total_weighted_topics
     topic_percentages = (topic_counts / total_topics * 100).round(1)
     
-    print(f"\nMost popular Topics for {analysis_name} ({display_period}):")
+    print(f"\nMost popular Topics for {analysis_name} ({display_period}) - Frequency Weighted:")
     print(f"Total questions analyzed: {total_questions}")
-    print("Top 15 Topics with counts and percentages:")
-    for topic, count in topic_counts.head(15).items():
+    print(f"Total weighted topic occurrences: {total_weighted_topics:.1f}")
+    print("Top 15 Topics with weighted frequencies and percentages:")
+    for topic, weighted_count in topic_counts.head(15).items():
         percentage = topic_percentages[topic]
-        print(f"{topic}: {count} ({percentage}%)")
+        print(f"{topic}: {weighted_count:.1f} ({percentage}%)")
     
     # Show company statistics for multi-company analyses
     if len(companies_found) > 1:
@@ -408,10 +571,24 @@ def analyze_companies_unified(company_filter_list, analysis_name, time_period="3
         for company, count in company_question_counts.head(10).items():
             print(f"{company}: {count} questions")
     
+    # Create topic-to-questions mapping for tooltips
+    topic_questions_map = {}
+    if len(successful_companies) > 0:
+        for topics_str, title in zip(filtered_df['Topics'].fillna(''), filtered_df.get('Title', filtered_df.get('Problem', '')).fillna('Untitled')):
+            if pd.isna(topics_str) or not topics_str.strip():
+                continue
+            filtered_topics = filter_topics(topics_str)
+            for topic in filtered_topics:
+                if topic not in topic_questions_map:
+                    topic_questions_map[topic] = []
+                if title and title.strip() and title not in topic_questions_map[topic]:
+                    topic_questions_map[topic].append(title.strip())
+    
     # Create visualization
-    create_interactive_visualizations(topic_counts.head(15), 
-                                    topic_percentages.head(15), 
-                                    analysis_name, display_period)
+    create_interactive_visualizations(topic_counts, 
+                                    topic_percentages, 
+                                    analysis_name, display_period, 
+                                    topic_questions_map)
     
     return topic_counts, topic_percentages
 
@@ -484,10 +661,33 @@ def analyze_neetcode_150():
         percentage = topic_percentages[topic]
         print(f"{topic}: {count} ({percentage}%)")
     
+    # Create topic-to-questions mapping for tooltips
+    topic_questions_map = {}
+    # Load the problem titles from slug_data.csv
+    try:
+        slug_df = pd.read_csv('../stats/slug_data.csv')
+        title_mapping = dict(zip(slug_df['frontendQuestionId'].astype(str), slug_df['title']))
+        
+        for problem_id in neetcode_problem_ids:
+            if problem_id in topic_mapping:
+                topics = topic_mapping[problem_id]
+                filtered_topics = [topic for topic in topics if topic not in EXCLUDED_TOPICS]
+                problem_title = title_mapping.get(problem_id, f"Problem {problem_id}")
+                
+                for topic in filtered_topics:
+                    if topic not in topic_questions_map:
+                        topic_questions_map[topic] = []
+                    if problem_title not in topic_questions_map[topic]:
+                        topic_questions_map[topic].append(problem_title)
+    except Exception as e:
+        print(f"Could not load question titles for tooltips: {e}")
+        topic_questions_map = {}
+    
     # Create visualization
-    create_interactive_visualizations(topic_counts.head(15), 
-                                    topic_percentages.head(15), 
-                                    "NeetCode_150_Curated_List", "All_Time")
+    create_interactive_visualizations(topic_counts, 
+                                    topic_percentages, 
+                                    "NeetCode_150_Curated_List", "All_Time", 
+                                    topic_questions_map)
     
     return topic_counts, topic_percentages
 
@@ -544,10 +744,33 @@ def analyze_local_problems():
         percentage = topic_percentages[topic]
         print(f"{topic}: {count} ({percentage}%)")
     
+    # Create topic-to-questions mapping for tooltips
+    topic_questions_map = {}
+    # Load the problem titles from slug_data.csv
+    try:
+        slug_df = pd.read_csv('../stats/slug_data.csv')
+        title_mapping = dict(zip(slug_df['frontendQuestionId'].astype(str), slug_df['title']))
+        
+        for problem_id, filename in local_problems.items():
+            if problem_id in topic_mapping:
+                topics = topic_mapping[problem_id]
+                filtered_topics = [topic for topic in topics if topic not in EXCLUDED_TOPICS]
+                problem_title = title_mapping.get(problem_id, filename.replace('.py', '').replace('_', ' ').title())
+                
+                for topic in filtered_topics:
+                    if topic not in topic_questions_map:
+                        topic_questions_map[topic] = []
+                    if problem_title not in topic_questions_map[topic]:
+                        topic_questions_map[topic].append(problem_title)
+    except Exception as e:
+        print(f"Could not load question titles for tooltips: {e}")
+        topic_questions_map = {}
+    
     # Create visualization
-    create_interactive_visualizations(topic_counts.head(15), 
-                                    topic_percentages.head(15), 
-                                    "Local_Problems", "All_Time")
+    create_interactive_visualizations(topic_counts, 
+                                    topic_percentages, 
+                                    "Local_Problems", "All_Time", 
+                                    topic_questions_map)
     
     return topic_counts, topic_percentages
 
